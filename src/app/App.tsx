@@ -651,7 +651,7 @@ export default function App() {
     const MIN_LOADING_MS = 2500;
 
     try {
-      const res = await fetch('https://staging.abotribe.com/api/method/abo.api.bar_details.onboard_bar', {
+      const res = await fetch('https://admin.abotribe.com/api/method/abo.api.bar_details.onboard_bar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(payload),
