@@ -16,12 +16,13 @@ interface StaffManagerProps {
 }
 
 const ROLES = [
-  { value: 'Owner',        label: 'Owner' },
-  { value: 'Bar Entry',    label: 'Bar Entry (Bouncer)' },
-  { value: 'Waiter',       label: 'Waiter' },
-  { value: 'Eventier',     label: 'Eventier' },
-  { value: 'DJ',           label: 'DJ' },
-  { value: 'Valet Manager',label: 'Valet Manager' },
+  { value: 'Owner', label: 'Owner' },
+  { value: 'Manager', label: 'Manager' },
+  { value: 'Bar Entry', label: 'Bar Entry (Bouncer)' },
+  { value: 'Waiter', label: 'Waiter' },
+  { value: 'Eventier', label: 'Eventier' },
+  { value: 'DJ', label: 'DJ' },
+  { value: 'Valet Manager', label: 'Valet Manager' },
 ];
 const MAX_PER_ROLE = 5;
 
@@ -40,8 +41,8 @@ export default function StaffManager({ staffUsers, onChange }: StaffManagerProps
 
   const filteredUsers = useMemo(() => {
     return staffUsers.filter(u => {
-      const matchesSearch = u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            u.phone.includes(searchTerm);
+      const matchesSearch = u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        u.phone.includes(searchTerm);
       const matchesRole = roleFilter === 'All Roles' || u.role === roleFilter;
       return matchesSearch && matchesRole;
     });
@@ -171,7 +172,7 @@ export default function StaffManager({ staffUsers, onChange }: StaffManagerProps
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <div className="p-6 space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
@@ -185,7 +186,7 @@ export default function StaffManager({ staffUsers, onChange }: StaffManagerProps
                   className="w-full px-4 py-2.5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Mobile Number <span className="text-rose-500">*</span>
@@ -254,9 +255,9 @@ export default function StaffManager({ staffUsers, onChange }: StaffManagerProps
               <button
                 onClick={handleCreate}
                 disabled={
-                  !formData.name || 
-                  formData.phone.length !== 10 || 
-                  !formData.role || 
+                  !formData.name ||
+                  formData.phone.length !== 10 ||
+                  !formData.role ||
                   (formData.role === 'Valet Manager' && !formData.email) ||
                   isRoleFull(formData.role)
                 }

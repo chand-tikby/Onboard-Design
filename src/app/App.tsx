@@ -114,11 +114,11 @@ const INITIAL_STEPS: StepData[] = [
         name: 'Bank Account',
         type: 'Master',
         fields: [
-          { label: 'Account Holder', value: '', state: 'default', type: 'text', required: true },
-          { label: 'Account Number', value: '', state: 'default', type: 'text', required: true },
-          { label: 'IFSC Code', value: '', state: 'default', type: 'text', required: true },
-          { label: 'Bank Name', value: '', state: 'default', type: 'text', required: true },
-          { label: 'Branch', value: '', state: 'default', type: 'text', required: true }
+          { label: 'Account Holder', value: '', state: 'default', type: 'text', required: false },
+          { label: 'Account Number', value: '', state: 'default', type: 'text', required: false },
+          { label: 'IFSC Code', value: '', state: 'default', type: 'text', required: false },
+          { label: 'Bank Name', value: '', state: 'default', type: 'text', required: false },
+          { label: 'Branch', value: '', state: 'default', type: 'text', required: false }
         ],
         carry_forward: ['Bank Account ID', 'IFSC Code']
       },
@@ -357,6 +357,29 @@ export default function App() {
     const field = doctype.fields.find(f => f.label === label);
     return field ? field.value : '';
   };
+
+
+
+  useEffect(() => {
+    setSteps(prevSteps => {
+      const newSteps = [...prevSteps];
+      const step1 = newSteps[1];
+      if (step1) {
+        const bankDoctype = step1.doctypes.find(d => d.name === 'Bank Account');
+        if (bankDoctype) {
+          let modified = false;
+          bankDoctype.fields.forEach(f => {
+            if (f.required) {
+              f.required = false;
+              modified = true;
+            }
+          });
+          if (modified) return newSteps;
+        }
+      }
+      return prevSteps;
+    });
+  }, []);
 
   const isStepValid = (stepIdx: number) => {
     const step = steps[stepIdx];
@@ -641,8 +664,11 @@ export default function App() {
       const remaining = Math.max(0, MIN_LOADING_MS - elapsed);
       await new Promise(r => setTimeout(r, remaining));
 
-      if (!res.ok) {
-        throw new Error(json?.message || json?.exception || `Server error ${res.status}`);
+      if (!res.ok || (json?.message && json.message.success === false)) {
+        const errorMsg = typeof json?.message?.message === 'string'
+          ? json.message.message
+          : (typeof json?.message === 'string' ? json.message : (json?.exception || `Server error ${res.status}`));
+        throw new Error(errorMsg);
       }
 
       setIsSubmitting(false);
