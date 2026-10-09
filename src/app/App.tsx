@@ -67,6 +67,7 @@ const INITIAL_STEPS: StepData[] = [
           { label: 'Landmark', value: '', state: 'default', type: 'text' },
           { label: 'City', value: '', state: 'default', type: 'text' },
           { label: 'Pincode', value: '', state: 'default', type: 'text' },
+          { label: 'Outlet Mobile No', value: '', state: 'default', type: 'tel' },
           { label: 'Surrounding Meters', value: '', state: 'default', type: 'text' },
           { label: 'Latitude', value: '', state: 'default', type: 'text' },
           { label: 'Longitude', value: '', state: 'default', type: 'text' }
@@ -639,6 +640,7 @@ export default function App() {
         pincode: fv(outletAddress, 'Pincode'),
         lattitude: fv(outletAddress, 'Latitude'),   // API spells it "lattitude"
         longitude: fv(outletAddress, 'Longitude'),
+        outlet_mobile_no: fv(outletAddress, 'Outlet Mobile No'),
         country: 'India',
         surrounding_meters: fv(outletAddress, 'Surrounding Meters'),
 
@@ -1201,7 +1203,8 @@ export default function App() {
                               getFieldValue(0, 'Outlet Address', 'Address Line 2'),
                               getFieldValue(0, 'Outlet Address', 'Landmark') ? `(Landmark: ${getFieldValue(0, 'Outlet Address', 'Landmark')})` : '',
                               getFieldValue(0, 'Outlet Address', 'City'),
-                              getFieldValue(0, 'Outlet Address', 'Pincode')
+                              getFieldValue(0, 'Outlet Address', 'Pincode'),
+                              getFieldValue(0, 'Outlet Address', 'Outlet Mobile No') ? `Mob: ${getFieldValue(0, 'Outlet Address', 'Outlet Mobile No')}` : ''
                             ].filter(Boolean).join(', ') || <em className="text-slate-400">Not provided</em>}
                           </span>
                         </div>
@@ -1757,6 +1760,12 @@ export default function App() {
                           <span className="text-slate-500 dark:text-slate-400">City / Pincode:</span>
                           <span className="font-bold text-slate-700 dark:text-slate-300">
                             {cityVal || '—'}{getFieldValue(0, 'Outlet Address', 'Pincode') ? `, ${getFieldValue(0, 'Outlet Address', 'Pincode')}` : ''}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-500 dark:text-slate-400">Mobile No:</span>
+                          <span className="font-bold text-slate-700 dark:text-slate-300">
+                            {getFieldValue(0, 'Outlet Address', 'Outlet Mobile No') || '—'}
                           </span>
                         </div>
                       </div>
