@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 interface Feature {
   name: string;
@@ -20,7 +21,7 @@ export default function FeaturesSelector({ selectedFeatures, onChange }: Feature
   useEffect(() => {
     const fetchFeatures = async () => {
       try {
-        const response = await fetch('https://dev.abotribe.com/api/method/abo.api.utils.get_features');
+        const response = await fetch(API_ENDPOINTS.getFeatures);
         const data = await response.json();
         if (data?.message?.status === 'success' && data.message.features) {
           setFeatures(data.message.features);

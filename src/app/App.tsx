@@ -5,6 +5,7 @@ import { toast, Toaster } from 'sonner';
 import FeaturesSelector from './FeaturesSelector';
 import StaffManager, { StaffUser } from './StaffManager';
 import { downloadPdf } from './PdfForm';
+import { API_ENDPOINTS } from '../config/api';
 
 interface Field {
   label: string;
@@ -653,7 +654,7 @@ export default function App() {
     const MIN_LOADING_MS = 2500;
 
     try {
-      const res = await fetch('https://staging.abotribe.com/api/method/abo.api.bar_details.onboard_bar', {
+      const res = await fetch(API_ENDPOINTS.onboardBar, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(payload),
