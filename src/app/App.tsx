@@ -5,7 +5,7 @@ import { toast, Toaster } from 'sonner';
 import FeaturesSelector from './FeaturesSelector';
 import StaffManager, { StaffUser } from './StaffManager';
 import { downloadPdf } from './PdfForm';
-import { API_ENDPOINTS } from '../config/api';
+import { API_ENDPOINTS, getApiEnvironment, setApiEnvironment, ENV_BASE_URLS, ApiEnvironment } from '../config/api';
 
 interface Field {
   label: string;
@@ -322,6 +322,15 @@ export default function App() {
     }
     return false;
   });
+
+  const [apiEnv, setApiEnv] = useState<ApiEnvironment>(getApiEnvironment);
+
+  const handleEnvChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newEnv = e.target.value as ApiEnvironment;
+    setApiEnv(newEnv);
+    setApiEnvironment(newEnv);
+    toast.info(`Switched API to ${newEnv.toUpperCase()} (${ENV_BASE_URLS[newEnv]})`);
+  };
 
   useEffect(() => {
     if (darkMode) {
@@ -1079,6 +1088,16 @@ export default function App() {
                 <Download className="w-4 h-4" />
                 <span className="hidden sm:inline">Download Form</span>
               </button>
+              <select
+                value={apiEnv}
+                onChange={handleEnvChange}
+                className="px-3 py-2 text-xs font-semibold rounded-xl border-2 border-amber-500 bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 cursor-pointer shadow-sm transition-colors"
+                title={`Active API: ${ENV_BASE_URLS[apiEnv]}`}
+              >
+                <option value="dev">Dev</option>
+                <option value="staging">Staging</option>
+                <option value="prod">Prod</option>
+              </select>
 
               {/* Theme Toggle Button */}
               <button
@@ -1506,6 +1525,7 @@ export default function App() {
                         ) : doctype.name === 'Features' ? (
                           // ── Custom Features UI ──
                           <FeaturesSelector
+                            key={apiEnv}
                             selectedFeatures={selectedFeatures}
                             onChange={setSelectedFeatures}
                           />

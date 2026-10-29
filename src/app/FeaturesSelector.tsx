@@ -21,13 +21,17 @@ export default function FeaturesSelector({ selectedFeatures, onChange }: Feature
   useEffect(() => {
     const fetchFeatures = async () => {
       try {
+        setLoading(true);
         const response = await fetch(API_ENDPOINTS.getFeatures);
         const data = await response.json();
         if (data?.message?.status === 'success' && data.message.features) {
           setFeatures(data.message.features);
+        } else {
+          setFeatures([]);
         }
       } catch (error) {
         console.error('Error fetching features:', error);
+        setFeatures([]);
       } finally {
         setLoading(false);
       }
